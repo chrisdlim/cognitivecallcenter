@@ -14,8 +14,8 @@ router.post('/record', function(req, res) {
 
     twiml.hangup();
 
-    response.type('text/xml'); 
-    response.send(twiml.toString());
+    res.type('text/xml'); 
+    res.send(twiml.toString());
 });
 
 // Create a route that will handle Twilio webhook requests, sent as an
@@ -23,7 +23,7 @@ router.post('/record', function(req, res) {
 router.post('/voice', function(req, res) {
     // Get information about the incoming call, like the city associated
     // with the phone number (if Twilio can discover it)
-    const city = request.body.FromCity;
+    const city = req.body.FromCity;
   
     // Use the Twilio Node.js SDK to build an XML response
     const twiml = new VoiceResponse();
@@ -33,8 +33,8 @@ router.post('/voice', function(req, res) {
     twiml.play({}, 'https://demo.twilio.com/docs/classic.mp3');
   
     // Render the response as XML in reply to the webhook request
-    response.type('text/xml');
-    response.send(twiml.toString());
+    res.type('text/xml');
+    res.send(twiml.toString());
   });
 
 module.exports = router;
