@@ -19,7 +19,7 @@ router.post('/record', function(req, res) {
 
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
-app.post('/voice', (request, response) => {
+router.post('/voice', function(req, res) {
     // Get information about the incoming call, like the city associated
     // with the phone number (if Twilio can discover it)
     const city = request.body.FromCity;
