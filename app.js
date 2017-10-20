@@ -4,6 +4,7 @@
 
 const express = require('express');
 const routes = require('./routes');
+const twiliort = require('./routes/twilio_listener');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -35,7 +36,7 @@ if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
-app.use('/', routes);
+app.use('/', twiliort);
 
 http.createServer(app).listen(app.get('port'), '0.0.0.0', function() {
   console.log('Express server listening on port ' + app.get('port'));

@@ -12,7 +12,7 @@
     "cors": "^2.8.4",
     "ejs": "2.5.x",
     "errorhandler": "1.5.x",
-    "express": "4.15.x",
+    "express": "^4.16.2",
     "express-fileupload": "^0.3.0",
     "method-override": "2.3.x",
     "morgan": "1.8.x",
