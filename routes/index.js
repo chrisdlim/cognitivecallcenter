@@ -1,8 +1,9 @@
+const express = require('express');
+const router = express.Router();
 
-/*
- * GET home page.
- */
 
-exports.index = function(req, res){
-  res.render('index.html', { title: 'Cloudant Boiler Plate' });
-};
+router.get('/', function(req, res){
+  res.json({ title: 'Cloudant Boiler Plate' });
+});;
+
+module.exports = router;
