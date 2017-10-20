@@ -16,7 +16,8 @@
     "express-fileupload": "^0.3.0",
     "method-override": "2.3.x",
     "morgan": "1.8.x",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "watson-developer-cloud": "^2.41.1"
   },
   "repository": {},
   "engines": {
