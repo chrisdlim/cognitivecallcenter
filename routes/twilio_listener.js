@@ -52,7 +52,7 @@ function initialize(sio) {
         }
 
         console.log('transcript completed: ' + transcript.toString('utf8'));
-        sio.sockets.emit('calls', {
+        sio.sockets.emit('call', {
           id: body.CallSid,
           recordingID: body.RecordingSid,
           recordingURL: body.RecordingUrl,
