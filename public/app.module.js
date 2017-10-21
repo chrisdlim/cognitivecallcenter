@@ -12,7 +12,19 @@ app.service('SocketService', function SocketService() {
   };
 });
 
-app.controller('myCtrl', ['$scope', 'SocketService', function($scope, SocketService) {
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "/view/home.html"
+    })
+     .when("/details", {
+        templateUrl : "/view/details.html",
+        controller: "detailsCtrl",
+        paramExample: 'exampleB'
+    });
+});
+
+app.controller('homeCtrl', ['$scope', 'SocketService', function($scope, SocketService) {
     var self = this;
     self.ss = SocketService;
 
@@ -35,35 +47,32 @@ app.controller('myCtrl', ['$scope', 'SocketService', function($scope, SocketServ
         },
         {
             id: "561-543-2344",
-            name: "Kev Roof",
+            name: "Kev Roofie",
             action: "update",
             mood: 34
         },
         {
             id: "561-543-2344",
-            name: "Kev Roof",
+            name: "Kevin's mom",
             action: "update",
             mood: 78
         },
         {
             id: "561-543-2344",
-            name: "Kev Roof",
+            name: "Morgan's Kate",
             action: "update",
             mood: 66
         },
         {
             id: "561-543-2344",
-            name: "Kev Roof",
+            name: "Monica the love of my life",
             action: "update",
             mood: 44
         }
     ];
 }]);
 
-app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-
-    $routeProvider.when('/details', {
-        templateUrl: '/public/view/details.html',
-        controller: 'detailsCtrl'
-    });
+app.controller('detailsCtrl', ['$scope', '$route', function ($scope, $route) {
+    var paramValue = $route.current.$$route.paramExample;
+    console.log(paramValue);
 }]);
