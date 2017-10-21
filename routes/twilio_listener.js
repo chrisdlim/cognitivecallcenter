@@ -18,14 +18,14 @@ function initialize(sio) {
         transcribe: false,
         recordingStatusCallback: '/handleRecording',
         maxLength: 20,
-        action: '/handleRecording'
+        finishOnKey: "*"
     });
 
       twiml.hangup();
 
       res.type('text/xml');
       console.log(twiml.toString());
-      console.log(util.inspect(req));
+      //console.log(util.inspect(req));
       res.send(twiml.toString());
   });
   
@@ -33,25 +33,6 @@ function initialize(sio) {
       var body = req.body;
      console.log(util.inspect(body));
   });
-
-  // Create a route that will handle Twilio webhook requests, sent as an
-  // HTTP POST to /voice in our application
-  router.post('/voice', function(req, res) {
-      // Get information about the incoming call, like the city associated
-      // with the phone number (if Twilio can discover it)
-      const city = req.body.FromCity;
-
-      // Use the Twilio Node.js SDK to build an XML response
-      const twiml = new VoiceResponse();
-      twiml.say({voice: 'alice'},
-        `Never gonna give you up ${city}.`
-      );
-      twiml.play({}, 'https://demo.twilio.com/docs/classic.mp3');
-
-      // Render the response as XML in reply to the webhook request
-      res.type('text/xml');
-      res.send(twiml.toString());
-    });
 
   // Create a route that will handle Twilio webhook requests, sent as an
   // HTTP POST to /voice in our application
