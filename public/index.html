@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IBM Call Center</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+  <script src="https://cdn.rawgit.com/AngularClass/angular-websocket/v2.0.0/dist/angular-websocket.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+
+  <script src="/public/scripts/myApp.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="/public/style/style.css" rel="stylesheet" />
+</head>
+    
+<body>
+<!--    <div class="container" ng-controller="CallController as call">-->
+        <div class="page-header text-center">
+             <img src="/public/img/ibmpos_blue.jpg"><br>
+            <h1>IBM Cognitive Call Center</h1>
+            
+            <div ng-view></div>
+            <a href="#!/details">details</a>
+        
+        </div
+    <br>
+    <div class="text-center" ng-app="myApp" ng-controller="myCtrl as ctrl">
+    <div class="contianer text-center" id="call-center">
+        <div id="calls">
+            <table border="0" class="container text-center table-striped">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Level</th>
+                </tr>
+
+                <tr class="text-center" ng-repeat="c in ctrl.callers">
+                    <td>{{c.id}}</td>
+                    <td>{{c.name}}</td>
+                     <td ng-if="c.mood<=20">
+                        <i class="fa fa-circle" style="font-size:24px;color:green"></i>
+                    </td>
+                    <td ng-if="c.mood<=40 && c.mood>20">
+                        <i class="fa fa-circle" style="font-size:24px;color:yellow"></i>
+                    </td>
+                    <td ng-if="c.mood<=74 && c.mood>40">
+                        <i class="fa fa-circle" style="font-size:24px;color:orange"></i>
+                    </td>
+                    <td ng-if="c.mood>=75">
+                        <i class="fa fa-circle" style="font-size:24px;color:red"></i>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
