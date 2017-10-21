@@ -32,5 +32,7 @@ module.exports.insert = function(doc) {
 };
 
 module.exports.list = function() {
-  return db.list();
+  return db.view('doc', 'allView', {include_docs: true}).then((data) => {
+      return data.rows.map((r) => r.value);
+    });
 }

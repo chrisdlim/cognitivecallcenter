@@ -5,6 +5,7 @@
 const express = require('express');
 const routes = require('./routes');
 const twiliort = require('./routes/twilio_listener');
+const calls = require('./routes/calllog');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -44,6 +45,7 @@ const io = socket(server);
 
 app.use('/', routes(io));
 app.use('/', twiliort(io));
+app.use('/logs', calls);
 
 io.on('connection', (socket) => {
   console.log('Connection at:  ', socket.id);
