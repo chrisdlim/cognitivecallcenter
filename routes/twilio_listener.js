@@ -15,7 +15,8 @@ router.post('/record', function(req, res) {
     	timeout: 5,
         transcribe: false,
         recordingStatusCallback: '/handleRecording',
-        maxLength: 20
+        maxLength: 20,
+        action: '/handleRecording'
     });
 
     twiml.hangup();
