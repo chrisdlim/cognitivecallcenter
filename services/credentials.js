@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 function init() {
   //When running on Bluemix, this variable will be set to a json object
   //containing all the service credentials of all the bound services

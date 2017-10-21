@@ -1,7 +1,9 @@
 const express = require('express');
+const http = require('http');
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const urlencoded = require('body-parser').urlencoded;
 const util = require('util');
+const {transcribe} = require('../services/speechtext');
 
 // socket.io instance passed in
 function initialize(sio) {
@@ -32,7 +34,34 @@ function initialize(sio) {
   router.post('/handleRecording', function(req, res) {
     var body = req.body;
     console.log(util.inspect(body));
-    res.send("OK");
+    if (body.RecordingStatus !== "completed") {
+      // ignore
+      return res.send("OK");
+    }
+
+    let recording = body.RecordingUrl + '.mp3';
+    let rqstParams = {
+      content_type: 'audio/mp3'
+      //, keywords: ['colorado', 'tornado', 'tornadoes']
+    };
+    let request = http.get(recording, function(response) {
+      transcribe(response, rqstParams, (err, transcript) => {
+        if(err) {
+          console.error(err.stack)
+          return res.status(500).send('Error transcribing recording!');
+        }
+
+        sio.sockets.emit('calls', {
+          id: body.CallSid,
+          recordingID: body.RecordingSid,
+          recordingURL: body.RecordingUrl,
+          recordingDuration: body.RecordingDuration,
+          transcript: transcript.toString('utf8')
+        });
+      });
+    });
+
+    return res.send("OK");
   });
 
   // Create a route that will handle Twilio webhook requests, sent as an
