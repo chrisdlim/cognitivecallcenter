@@ -22,7 +22,9 @@ fs.readFile(filename, 'utf-8', function(file_error, file_data) {
       html: file_data,
       features: {
         concepts: {},
-        keywords: {}
+        keywords: {},
+	entities: {},
+	sentiment: {}
       }
     };
     nlu.analyze(options, function(err, res) {
