@@ -1,7 +1,6 @@
 'use strict';
-const fs = require('fs');
+const {promisify} = require('util');
 const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js');
-require('dotenv').config({ silent: true }); //  optional
 
 const nlu = new NaturalLanguageUnderstandingV1({
   // note: if unspecified here, credentials are pulled from environment properties:
@@ -13,26 +12,18 @@ const nlu = new NaturalLanguageUnderstandingV1({
   version_date: NaturalLanguageUnderstandingV1.VERSION_DATE_2016_01_23
 });
 
-const filename = './energy-policy.html';
-fs.readFile(filename, 'utf-8', function(file_error, file_data) {
-  if (file_error) {
-    console.log(file_error);
-  } else {
-    const options = {
-      html: file_data,
-      features: {
-        concepts: {},
-        keywords: {},
-	entities: {},
-	sentiment: {}
-      }
-    };
-    nlu.analyze(options, function(err, res) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(res);
-    });
-  }
-});
+const analyzeAsync = promisify(nlu.analyze);
+
+module.exports = function(text) {
+	const options = {
+		text: text,
+		features: {
+			concepts: {},
+			keywords: {},
+			entities: {},
+			//sentiment: {}
+		}
+	};
+
+	return analyzeAsync(options);
+};

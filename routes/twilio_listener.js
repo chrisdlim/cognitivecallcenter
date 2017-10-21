@@ -5,6 +5,7 @@ const urlencoded = require('body-parser').urlencoded;
 const util = require('util');
 const {transcribe} = require('../services/speechtext');
 const {insert,list} = require('../services/cloudant');
+const nlu = require('../services/nlu');
 
 const transcribeAsync = util.promisify(transcribe);
 
@@ -40,7 +41,14 @@ function initialize(sio) {
 
     http.get(recording, function(response) {
       transcribeAsync(response, rqstParams)
-        .then((transcript) => insert(Object.assign({}, req.body, {text: transcript.toString('utf8')})))
+        .then((transcript) => {
+          return nlu(transcript).then((analysis) => {
+            return insert(Object.assign({}, req.body, {
+              text: transcript.toString('utf8'),
+              analysis: analysis
+            }));
+          });
+        })
         .then(() => res.send('ok'))
         .catch((e) => {
           console.error(e);
