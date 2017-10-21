@@ -1,7 +1,25 @@
 var app = angular.module('myApp', ['ngRoute']);
-app.controller('myCtrl', function($scope) {
+
+app.service('SocketService', function SocketService() {
+  var self = this;
+  self.socket = io.connect('/');
+  self.register = function($scope, cb) {
+    self.socket.on('call', function(data) {
+      $scope.$apply(function() {
+        cb(data);
+      });
+    });
+  };
+});
+
+app.controller('myCtrl', ['$scope', 'SocketService', function($scope, SocketService) {
     var self = this;
-    
+    self.ss = SocketService;
+
+    self.ss.register($scope, (data) => {
+      console.log(data);
+    });
+
     self.callers = [
         {
             id: "203-907-7424",
@@ -40,7 +58,7 @@ app.controller('myCtrl', function($scope) {
             mood: 44
         }
     ];
-});
+}]);
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
