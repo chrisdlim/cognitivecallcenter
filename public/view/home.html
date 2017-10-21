@@ -5,15 +5,15 @@
           <h1>Calls</h1>
             <table class="container text-center table-striped">
                 <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Name</th>
-                    <th class="text-center">Level</th>
+                    <th class="text-center">Transcript Preview</th>
+                    <!-- <th class="text-center">Name</th> -->
+                    <!-- <th class="text-center">Level</th> -->
                     <th class="text-center">Details</th>
                 </tr>
                 <tr ng-repeat="c in ctrl.callers">
-                    <td><strong>{{c.id}}<strong></td>
-                    <td>{{c.name}}</td>
-                     <td ng-if="c.mood<=20">
+                    <td><div class="transcript-preview">{{c.doc.text}}</div></td>
+                    <!-- <td>{{c.name}}</td> -->
+                     <!--<td ng-if="c.mood<=20">
                         <i class="fa fa-circle" style="font-size:24px;color:green"></i>
                     </td>
                     <td ng-if="c.mood<=40 && c.mood>20">
@@ -24,9 +24,9 @@
                     </td>
                     <td ng-if="c.mood>=75">
                         <i class="fa fa-circle" style="font-size:24px;color:red"></i>
-                    </td>
+                    </td> -->
                     <td>
-                        <a href="#!details?id={{c.id}}&name={{c.name}}&action={{c.action}}&mood={{c.mood}}&transcript={{c.transcript}}">Link</a>
+                        <a class="badge badge-info badge-pill" href="#!details?id={{$index}}">Link</a>
                     </td>
                 </tr>
             </table>
