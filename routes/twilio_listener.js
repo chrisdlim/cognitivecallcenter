@@ -13,15 +13,15 @@ function initialize(sio) {
   router.use(urlencoded({extended: false}));
 
   router.post('/dial', function(req, res) {
-    const response = new VoiceResponse();
-    const dial = response.dial({
+    const twiml = new VoiceResponse();
+    const dial = twiml.dial({
         record: 'record-from-answer',
         recordingStatusCallback: '/dialHandle',
         trim: 'trim-silence'
     });
     dial.number('301-337-7475');
 
-    console.log(response.toString());
+    console.log(twiml.toString());
 
     console.log(JSON.stringify(req.body));
     res.type('text/xml');
