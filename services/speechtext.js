@@ -11,7 +11,7 @@ const stt = new watson.SpeechToTextV1({
 const authService = new watson.AuthorizationV1(stt.getCredentials());
 
 const DEFAULT_PARAMS = {
-  model: 'en-US_BroadbandModel',
+  model: 'en-US_NarrowbandModel',
   content_type: 'audio/flac',
   'interim_results': false,
   'max_alternatives': 3,
