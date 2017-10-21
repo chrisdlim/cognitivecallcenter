@@ -37,14 +37,14 @@ if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
-app.use('/', routes);
-app.use('/', twiliort);
-
 const server = http.createServer(app).listen(app.get('port'), '0.0.0.0', function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
-
 const io = socket(server);
+
+app.use('/', routes(io));
+app.use('/', twiliort(io));
+
 io.on('connection', (socket) => {
   console.log('Connection at:  ', socket.id);
   socket.on('call', function(data) {
