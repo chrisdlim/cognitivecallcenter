@@ -10,11 +10,15 @@ router.post('/record', function(req, res) {
     const twiml = new VoiceResponse();
     twiml.say('hello. please leave a message after the beep');
 
-    twiml.record();
+    twiml.record({
+    	timeout: 10,
+    	transcribe: false
+    });
 
     twiml.hangup();
 
-    res.type('text/xml'); 
+    res.type('text/xml');
+	console.log(twiml.toString());
     res.send(twiml.toString());
 });
 
