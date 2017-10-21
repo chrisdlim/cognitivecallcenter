@@ -44,7 +44,7 @@ function initialize(sio) {
       .then((transcript) => db.insert({CallSid: body.CallSid, text: transcript.toString('utf8')}))
       .then(() => res.send('ok'))
       .catch((err) => {
-        console.error(err.stack)
+        console.error(err + ": " + err.stack);
         return res.status(500).send('Error transcribing recording!');
       });
   });
