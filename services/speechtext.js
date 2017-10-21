@@ -10,7 +10,7 @@ const stt = new watson.SpeechToTextV1({
 
 const authService = new watson.AuthorizationV1(stt.getCredentials());
 
-const params = {
+const DEFAULT_PARAMS = {
   model: 'en-US_BroadbandModel',
   content_type: 'audio/flac',
   'interim_results': false,
@@ -21,22 +21,49 @@ const params = {
   'keywords_threshold': 0.5
 };
 
-var recognizeStream = stt.createRecognizeStream(params);
+/**
+ * Transcribes
+ *
+ * input = input stream
+ * param_override = key value pairs to override default params
+ * cb = standard node callback accepting (err, data) where data is a buffer for
+ *      the transcription
+ *
+ * Returns the recognize stream which has an output that can be piped and is an
+ * event emitter
+ */
+function transcribe(input, param_override, cb) {
+  const params = Object.assign({}, DEFAULT_PARAMS, param_override);
 
-fs.createReadStream('audio-file.flac').pipe(recognizeStream);
-recognizeStream.pipe(fs.createWriteStream('transcription.txt'));
-recognizeStream.setEncoding('utf8');
+  const recognizeStream = stt.createRecognizeStream(params);
+  recognizeStream.setEncoding('utf8');
+  input.pipe(recognizeStream);
 
-// Listen for events.
-//recognizeStream.on('results', function(event) { onEvent('Results:', event); });
-recognizeStream.on('data', function(event) { onEvent('Data:', event); });
-//recognizeStream.on('error', function(event) { onEvent('Error:', event); });
-//recognizeStream.on('close', function(event) { onEvent('Close:', event); });
-//recognizeStream.on('speaker_labels', function(event) { onEvent('Speaker_Labels:', event); });
+  recognizeStream.on('data', (event) => {
+    cb(null, event);
+  });
 
-// Displays events on the console.
-function onEvent(name, event) {
-  console.log(name, JSON.stringify(event, null, 2));
+  recognizeStream.on('error', (event) => {
+    cb(event, null);
+  });
+
+  return recognizeStream;
+}
+
+module.exports.transcribe = transcribe;
+module.exports._demo = function() {
+  let input = fs.createReadStream('audio-file.flac');
+  let params = {
+    content_type: 'audio/flac',
+    keywords: ['colorado', 'tornado', 'tornadoes']
+  };
+
+  transcribe(input, params, (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    console.log(data.toString('utf8'));
+  });
 };
-
-module.exports = function() {};
