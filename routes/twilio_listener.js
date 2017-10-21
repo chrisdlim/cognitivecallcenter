@@ -32,6 +32,7 @@ function initialize(sio) {
   router.post('/handleRecording', function(req, res) {
     var body = req.body;
     console.log(util.inspect(body));
+    res.send("OK");
   });
 
   // Create a route that will handle Twilio webhook requests, sent as an
