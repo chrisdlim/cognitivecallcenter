@@ -14,34 +14,19 @@ function initialize(sio) {
     twiml.say('hello. please leave a message after the beep. press the star key when finished.');
 
     twiml.record({
-<<<<<<< HEAD
     	timeout: 5,
         transcribe: false,
         recordingStatusCallback: '/handleRecording',
         maxLength: 20,
         finishOnKey: "*"
-=======
-      timeout: 5,
-      transcribe: false,
-      recordingStatusCallback: '/handleRecording',
-      maxLength: 20,
-      action: '/handleRecording'
->>>>>>> 01b5f4e8826781aa3fea5e4d886573225ef4b7a9
     });
 
     twiml.hangup();
 
-<<<<<<< HEAD
       res.type('text/xml');
       console.log(twiml.toString());
       //console.log(util.inspect(req));
       res.send(twiml.toString());
-=======
-    res.type('text/xml');
-    console.log(twiml.toString());
-    console.log(util.inspect(req));
-    res.send(twiml.toString());
->>>>>>> 01b5f4e8826781aa3fea5e4d886573225ef4b7a9
   });
 
   router.post('/handleRecording', function(req, res) {
@@ -68,9 +53,7 @@ function initialize(sio) {
     res.send(twiml.toString());
   });
 
-<<<<<<< HEAD
-    return router;
-=======
+    //return router;
   // Create a route that will handle Twilio webhook requests, sent as an
   // HTTP POST to /voice in our application
   router.post('/voice', function(req, res) {
@@ -91,7 +74,6 @@ function initialize(sio) {
   });
 
   return router;
->>>>>>> 01b5f4e8826781aa3fea5e4d886573225ef4b7a9
 }
 
 module.exports = initialize;
