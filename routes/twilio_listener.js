@@ -6,7 +6,6 @@ const util = require('util');
 const {transcribe} = require('../services/speechtext');
 const {insert,list} = require('../services/cloudant');
 
-const rqstAsync = util.promisify(http.get);
 const transcribeAsync = util.promisify(transcribe);
 
 // socket.io instance passed in
@@ -39,14 +38,18 @@ function initialize(sio) {
       //, keywords: ['colorado', 'tornado', 'tornadoes']
     };
 
-    rqstAsync(recording)
-      .then((response) => transcribeAsync(response, rqstParams))
-      .then((transcript) => db.insert({CallSid: body.CallSid, text: transcript.toString('utf8')}))
-      .then(() => res.send('ok'))
-      .catch((err) => {
-        console.error(err + ": " + err.stack);
-        return res.status(500).send('Error transcribing recording!');
-      });
+    http.get(recording, function(response) {
+      transcribeAsync(response, rqstParams)
+        .then((transcript) => db.insert({CallSid: body.CallSid, text: transcript.toString('utf8')}))
+        .then(() => res.send('ok'))
+        .catch((e) => {
+          console.error(e);
+          return res.status(500).send('Error transcribing recording!');
+        });
+    }).on('error', function(e) {
+      console.error(e);
+      return res.status(500).send('Error downloading recording!');
+    });
   });
 
   router.post('/record', function(req, res) {
