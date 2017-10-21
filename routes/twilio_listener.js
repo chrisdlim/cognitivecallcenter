@@ -8,18 +8,24 @@ router.use(urlencoded({extended: false}));
 
 router.post('/record', function(req, res) {
     const twiml = new VoiceResponse();
-    twiml.say('hello. please leave a message after the beep');
+    twiml.say('hello. please leave a message after the beep.\press the star key when finished.');
 
     twiml.record({
-    	timeout: 10,
-    	transcribe: false
+    	timeout: 5,
+        transcribe: false,
+        recordingStatusCallback: '/handleRecording',
+        maxLength: 20
     });
 
     twiml.hangup();
 
     res.type('text/xml');
-	console.log(twiml.toString());
+    console.log(twiml.toString());
+    console.log(req.toString());
     res.send(twiml.toString());
+});
+router.post('/handleRecording', function(req, res) {
+   console.log(req.toString()); 
 });
 
 // Create a route that will handle Twilio webhook requests, sent as an
