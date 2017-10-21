@@ -8,6 +8,7 @@ const twiliort = require('./routes/twilio_listener');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
+const socket = require('socket.io');
 
 const cors = require('cors')
 
@@ -36,8 +37,26 @@ if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
-app.use('/', twiliort);
-
-http.createServer(app).listen(app.get('port'), '0.0.0.0', function() {
+const server = http.createServer(app).listen(app.get('port'), '0.0.0.0', function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
+const io = socket(server);
+
+app.use('/', routes(io));
+app.use('/', twiliort(io));
+
+io.on('connection', (socket) => {
+  console.log('Connection at:  ', socket.id);
+  socket.on('call', function(data) {
+    io.sockets.emit('call', data);
+  });
+});
+
+const interval = setInterval(function() {
+  io.sockets.emit('call', {
+      id: "203-907-7424",
+      name: "Chris Lim",
+      action: "in-progress",
+      mood: 12
+  });
+}, 10000);
