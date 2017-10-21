@@ -13,7 +13,7 @@ function initialize(sio) {
   router.use(urlencoded({extended: false}));
 
   router.post('/dial', function(req, res) {
-    const response = new VoiceResponse();
+    const twiml = new VoiceResponse();
     const dial = response.dial({
         record: 'record-from-answer',
         recordingStatusCallback: '/dialHandle',
