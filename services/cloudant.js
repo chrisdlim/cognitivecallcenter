@@ -4,6 +4,11 @@
 const fs = require('fs');
 const dbCred = require('./credentials').cloudantNoSQLDB;
 
+const naughty = ["Car bomb" ,"Jihad" , "Taliban","Weapons cache",
+"Suicide bomber", "Suicide attack", "Suspicious substance", "AQAP", "AQIM",
+"TTP", "Yemen", "Pirates", "Extremism", "Somalia", "Nigeria", "Radicals",
+"Al-Shabaab", "Home grown", "annihilate", "death"];
+
 const DB_NAME = 'calls';
 
 var cloudant;
@@ -35,4 +40,11 @@ module.exports.list = function() {
   return db.view('doc', 'allView', {include_docs: true}).then((data) => {
       return data.rows.map((r) => r.value);
     });
-}
+};
+
+module.exports.searchNaughty = function() {
+  const query = naughty.map((word) => `text: ${word}`).join(' OR ');
+
+  return db.search('doc', 'transcriptSearch', {q: query, include_docs: true})
+    .then((docs) => docs.rows);
+};
