@@ -35,8 +35,11 @@ function initialize(sio) {
     console.log(JSON.stringify(req.body));
     const recording = req.body.RecordingUrl + '.mp3';
     const rqstParams = {
-      content_type: 'audio/mp3'
-      //, keywords: ['colorado', 'tornado', 'tornadoes']
+      content_type: 'audio/mp3',
+      keywords: ["Car bomb" ,"Jihad" , "Taliban","Weapons cache",
+      "Suicide bomber", "Suicide attack", "Suspicious substance", "AQAP", "AQIM",
+      "TTP", "Yemen", "Pirates", "Extremism", "Somalia", "Nigeria", "Radicals",
+      "Al-Shabaab", "Home grown", "annihilate", "death"]
     };
 
     http.get(recording, function(response) {
