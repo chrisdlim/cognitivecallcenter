@@ -16,3 +16,12 @@ tr {
 #alert{
     background-color: indianred;
 }
+
+tr, th{
+  text-align: center;
+}
+
+table {
+  border: 0;
+  table-layout: fixed;
+}

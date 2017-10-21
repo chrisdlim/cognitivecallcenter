@@ -1,19 +1,17 @@
-<div class="page-header text-center">
-    <img src="/img/ibmpos_blue.jpg"><br>
-    <h1>IBM Cognitive Call Center</h1>        
-</div>   
 <div class="text-center" ng-app="homeApp" ng-controller="homeCtrl as ctrl">
     <div class="container text-center" id="call-center">
         <div id="calls">
-            <table border="0" class="container text-center table-striped">
+          <br><br>
+          <h1>Calls</h1>
+            <table class="container text-center table-striped">
                 <tr>
                     <th class="text-center">ID</th>
                     <th class="text-center">Name</th>
                     <th class="text-center">Level</th>
                     <th class="text-center">Details</th>
                 </tr>
-                <tr class="text-center" ng-repeat="c in ctrl.callers">
-                    <td>{{c.id}}</td>
+                <tr ng-repeat="c in ctrl.callers">
+                    <td><strong>{{c.id}}<strong></td>
                     <td>{{c.name}}</td>
                      <td ng-if="c.mood<=20">
                         <i class="fa fa-circle" style="font-size:24px;color:green"></i>
@@ -28,10 +26,12 @@
                         <i class="fa fa-circle" style="font-size:24px;color:red"></i>
                     </td>
                     <td>
-                        <a href="#!details?id={{c.id}}&name={{c.name}}&mood={{c.mood}}">Link</a>
+                        <a href="#!details?id={{c.id}}&name={{c.name}}&action={{c.action}}&mood={{c.mood}}&transcript={{c.transcript}}">Link</a>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
     </div>
+
+    <!-- ?id={{c.id}}&name={{c.name}}&mood={{c.mood}} -->
