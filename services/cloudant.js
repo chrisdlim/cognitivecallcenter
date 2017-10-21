@@ -4,7 +4,7 @@
 const fs = require('fs');
 const dbCred = require('./credentials').cloudantNoSQLDB;
 
-const DB_NAME = 'database';
+const DB_NAME = 'calls';
 
 var cloudant;
 var db;
@@ -19,7 +19,7 @@ function initDBConnection(dbName) {
   };
 
   dbCredentials.url = dbCred.url;
-  cloudant = require('cloudant')(dbCredentials.url);
+  cloudant = require('cloudant')({url: dbCredentials.url, plugin: 'promises'});
   db = cloudant.use(dbCredentials.dbName);
 }
 
@@ -27,3 +27,10 @@ initDBConnection(DB_NAME);
 
 module.exports.cloudant = cloudant;
 module.exports.db = db;
+module.exports.insert = function(doc) {
+  return db.insert(doc);
+};
+
+module.exports.list = function() {
+  return db.list();
+}
