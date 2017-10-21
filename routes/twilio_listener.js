@@ -21,11 +21,11 @@ router.post('/record', function(req, res) {
 
     res.type('text/xml');
     console.log(twiml.toString());
-    console.log(req.toString());
+    console.log(JSON.stringify(req));
     res.send(twiml.toString());
 });
 router.post('/handleRecording', function(req, res) {
-   console.log(req.toString()); 
+   console.log(JSON.stringify(req)); 
 });
 
 // Create a route that will handle Twilio webhook requests, sent as an
