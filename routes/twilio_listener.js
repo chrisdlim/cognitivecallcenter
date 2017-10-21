@@ -1,6 +1,7 @@
 const express = require('express');
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const urlencoded = require('body-parser').urlencoded;
+const util = require('util');
 
 const router = express.Router();
 
@@ -21,11 +22,11 @@ router.post('/record', function(req, res) {
 
     res.type('text/xml');
     console.log(twiml.toString());
-    console.log(JSON.stringify(req));
+    console.log(util.inspect(req));
     res.send(twiml.toString());
 });
 router.post('/handleRecording', function(req, res) {
-   console.log(JSON.stringify(req)); 
+   console.log(util.inspect(req)); 
 });
 
 // Create a route that will handle Twilio webhook requests, sent as an
