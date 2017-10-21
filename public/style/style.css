@@ -16,3 +16,18 @@ tr {
 #alert{
     background-color: indianred;
 }
+
+tr, th{
+  text-align: center;
+}
+
+table {
+  border: 0;
+  table-layout: fixed;
+}
+
+.transcript-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

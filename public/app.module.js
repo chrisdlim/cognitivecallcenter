@@ -1,16 +1,25 @@
 var app = angular.module('myApp', ['ngRoute']);
 
-app.service('SocketService', function SocketService() {
+app.service('QueryService', ['$http', function QueryService($http) {
   var self = this;
-  self.socket = io.connect('/');
-  self.register = function($scope, cb) {
-    self.socket.on('call', function(data) {
-      $scope.$apply(function() {
-        cb(data);
-      });
+  self.callers = [];
+  self._fetched = false;
+  self.naughties = function(cb) {
+    if(self._fetched) {
+      return cb(self.callers);
+    }
+    $http({
+      method: 'GET',
+      url: '/logs/naughty'
+    }).then(function(data) {
+      self.callers = data.data;
+      self._fetched = true;
+      cb(data);
+    }, function errorCallback(response) {
+      console.error(response);
     });
   };
-});
+}]);
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -19,60 +28,75 @@ app.config(function($routeProvider) {
     })
      .when("/details", {
         templateUrl : "/view/details.html",
-        controller: "detailsCtrl",
-        paramExample: 'exampleB'
+        controller: "detailsCtrl"
     });
 });
 
-app.controller('homeCtrl', ['$scope', 'SocketService', function($scope, SocketService) {
+app.controller('homeCtrl', ['QueryService', function(qs) {
     var self = this;
-    self.ss = SocketService;
+    self.qs = qs;
 
-    self.ss.register($scope, (data) => {
-      console.log(data);
+    console.log(qs);
+
+    self.qs.naughties(function(data) {
+        self.callers = self.qs.callers;
     });
 
-    self.callers = [
-        {
-            id: "203-907-7424",
-            name: "Chris Lim",
-            action: "called",
-            mood: 12
-        },
-        {
-            id: "973-203-4657",
-            name: "Morgue Town",
-            action: "hung up",
-            mood: 96
-        },
-        {
-            id: "561-543-2344",
-            name: "Kev Roofie",
-            action: "update",
-            mood: 34
-        },
-        {
-            id: "561-543-2344",
-            name: "Kevin's mom",
-            action: "update",
-            mood: 78
-        },
-        {
-            id: "561-543-2344",
-            name: "Morgan's Kate",
-            action: "update",
-            mood: 66
-        },
-        {
-            id: "561-543-2344",
-            name: "Monica the love of my life",
-            action: "update",
-            mood: 44
-        }
-    ];
+    // self.callers = [
+    //     {
+    //         id: "203-907-7424",
+    //         name: "Chris Lim",
+    //         action: "in-progress",
+    //         mood: 12,
+    //         transcript: "I love monica I love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monicaI love monica"
+    //     },
+    //     {
+    //         id: "973-203-4657",
+    //         name: "Morgue Town",
+    //         action: "hung-up",
+    //         mood: 96,
+    //         transcript: "Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! Kate doesn't like me! "
+    //     },
+    //     {
+    //         id: "561-543-2344",
+    //         name: "Kev Roofie",
+    //         action: "update",
+    //         mood: 34
+    //     },
+    //     {
+    //         id: "561-543-2344",
+    //         name: "Kevin's mom",
+    //         action: "in-progress",
+    //         mood: 78
+    //     },
+    //     {
+    //         id: "561-543-2344",
+    //         name: "Morgan's Kate",
+    //         action: "update",
+    //         mood: 66
+    //     },
+    //     {
+    //         id: "561-543-2344",
+    //         name: "Monica the love of my life",
+    //         action: "hung-up",
+    //         mood: 44
+    //     }
+    // ];
+
 }]);
 
-app.controller('detailsCtrl', ['$scope', '$route', function ($scope, $route) {
-    var paramValue = $route.current.$$route.paramExample;
-    console.log(paramValue);
+app.controller('detailsCtrl', ['$scope', '$route', '$routeParams', '$location', 'QueryService', function ($scope, $route, $routeParams, $location, qs) {
+  var index = parseInt($location.search().id);
+  var self = this;
+
+  self.qs = qs;
+
+  self.qs.naughties(function(data) {
+      self.callers = self.qs.callers;
+      self.caller = self.callers[index];
+  });
+
+  $scope.connectCall = function(){
+    console.log("Connecting with: " + caller.id);
+  }
 }]);
