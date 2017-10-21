@@ -35,7 +35,7 @@ function initialize(sio) {
     var body = req.body;
     console.log(util.inspect(body));
     if (body.RecordingStatus !== "completed") {
-      // ignore
+      console.log(`Not completed, was ${body.RecordingStatus}; ignoring...`);
       return res.send("OK");
     }
 
@@ -51,6 +51,7 @@ function initialize(sio) {
           return res.status(500).send('Error transcribing recording!');
         }
 
+        console.log('transcript completed: ' + transcript.toString('utf8'));
         sio.sockets.emit('calls', {
           id: body.CallSid,
           recordingID: body.RecordingSid,
