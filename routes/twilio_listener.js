@@ -40,7 +40,7 @@ function initialize(sio) {
 
     http.get(recording, function(response) {
       transcribeAsync(response, rqstParams)
-        .then((transcript) => db.insert({CallSid: body.CallSid, text: transcript.toString('utf8')}))
+        .then((transcript) => insert({CallSid: req.body.CallSid, text: transcript.toString('utf8')}))
         .then(() => res.send('ok'))
         .catch((e) => {
           console.error(e);
