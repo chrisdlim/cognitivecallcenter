@@ -41,19 +41,19 @@ function initialize(sio) {
 
     http.get(recording, function(response) {
       transcribeAsync(response, rqstParams)
-        .then((transcript) => {
-          return nlu(transcript).then((analysis) => {
-            return insert(Object.assign({}, req.body, {
-              text: transcript.toString('utf8'),
-              analysis: analysis
-            }));
+      .then((transcript) => {
+        nlu(transcript, (err, analysis) => {
+          return insert(Object.assign({}, req.body, {
+            text: transcript.toString('utf8'),
+            analysis: !err ? analysis : null
+          }))
+          .then(() => res.send('ok'))
+          .catch((e) => {
+            console.error(e);
+            return res.status(500).send('Error transcribing recording!');
           });
-        })
-        .then(() => res.send('ok'))
-        .catch((e) => {
-          console.error(e);
-          return res.status(500).send('Error transcribing recording!');
         });
+      })
     }).on('error', function(e) {
       console.error(e);
       return res.status(500).send('Error downloading recording!');

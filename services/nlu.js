@@ -12,18 +12,16 @@ const nlu = new NaturalLanguageUnderstandingV1({
   version_date: NaturalLanguageUnderstandingV1.VERSION_DATE_2016_01_23
 });
 
-const analyzeAsync = promisify(nlu.analyze);
-
-module.exports = function(text) {
+module.exports = function(text, cb) {
 	const options = {
 		text: text,
 		features: {
 			concepts: {},
 			keywords: {},
-			entities: {},
+			entities: {}
 			//sentiment: {}
 		}
 	};
 
-	return analyzeAsync(options);
+	nlu.analyze(options, cb);
 };
